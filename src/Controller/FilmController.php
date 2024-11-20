@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace src\Controller;
 
 class FilmController
 {
