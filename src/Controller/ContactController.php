@@ -1,22 +1,21 @@
 <?php
+namespace App\Controller;
 
-namespace src\Controller;
-
-class ContactController
-{
-    public function create()
-    {
+class ContactController{
+    public function list(){
+        echo "Liste des contact";
     }
-
-    public function read()
-    {
+    public function create(){
+        echo "Creation d'un contact";
     }
-
-    public function update()
-    {
+    public function read(){
+        echo "Lire un contact";
     }
-
-    public function delete()
-    {
+    public function update(){
+        echo "Mise à jour d'un contact";
+    }
+    public function delete(){
+        echo "Supprimer un contact";
     }
 }
+?>

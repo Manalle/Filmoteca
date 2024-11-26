@@ -1,31 +1,44 @@
 <?php
 
-namespace src\Controller;
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Repository\FilmRepository;
 
 class FilmController
 {
-    public function liste()
+    public function list(array $params)
     {
-        echo "liste films";
+        $filmRepository = new FilmRepository();
+        $films = $filmRepository->findAll();
+
+        
     }
 
     public function create()
     {
-        echo "creation films";
+        
+        echo "Création d'un film";
     }
 
-    public function read()
+    public function read(array $params)
     {
-        echo "lire film";
+        $filmRepository = new FilmRepository();
+        $films = $filmRepository->getFilm((int)$params['id']);
+
+        echo "Lecture d'un film";
     }
 
     public function update()
     {
-        echo "mise à jour film";
+        echo "Mise à jour d'un film";
     }
 
     public function delete()
     {
-        echo "supprimer film";
+        echo "Suppression d'un film";
     }
+    
+    
 }
