@@ -29,10 +29,20 @@ class FilmController
             $filmEntities[] = $filmEntity;
         } */
 
-        dd($films);
+        //ajout twig 
+        echo $this->twig->render('filmsList.html.twig' , ['films' => $films]);
+
+        // dd($films);
 
         // header('Content-Type: application/json');
         // echo json_encode($films);
+    }
+
+    // ajout
+    public fuction  index(){
+        $filmRepository = new FilmRepository();
+        $films = $filmRepository->findAll();
+        echo $this->twig->render('films.html.twig' , ['films' => $films]);
     }
 
     public function create()
@@ -45,7 +55,9 @@ class FilmController
         $filmRepository = new FilmRepository();
         $film = $filmRepository->find((int) $queryParams['id']);
 
-        dd($film);
+        // dd($film);
+        //Ajout twig : 
+        echo $this->twig->render('filmdetails.html.twig' , ['film' => $film]);
     }
 
     public function update()
