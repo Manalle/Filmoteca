@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-class Film
+class FilmEntity
 {
     private int $id;
     private string $title;

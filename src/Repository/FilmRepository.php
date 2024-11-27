@@ -1,55 +1,83 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Repository;
 
 use App\Core\DatabaseConnection;
 use App\Service\EntityMapper;
-use App\Entity\Film;
+use App\Entity\FilmEntity;
 
 class FilmRepository
 {
-    private \PDO $db; // Instance de connexion à la base de données
-    private EntityMapper $entityMapperService; // Service pour mapper les entités
+    private \PDO $db;
+    private EntityMapper $entityMapperService;
 
     public function __construct()
     {
-        // Initialise la connexion à la base de données en utilisant DatabaseConnection
         $this->db = DatabaseConnection::getConnection();
-        // Initialise le service de mappage des entités
         $this->entityMapperService = new EntityMapper();
     }
 
-    // Méthode pour récupérer tous les films de la base de données
-    public function findAll(): array
+    // Récupérer tous les films
+    public function findAll()
     {
-        // Requête SQL pour sélectionner tous les films
         $query = 'SELECT * FROM film';
-        // Exécute la requête et récupère le résultat
         $stmt = $this->db->query($query);
 
-        // Récupère tous les films sous forme de tableau associatif
         $films = $stmt->fetchAll();
 
-        // Utilise le service de mappage pour convertir les résultats en objets Film
-        return $this->entityMapperService->mapToEntities($films, Film::class);
+        return $this->entityMapperService->mapToEntities($films, FilmEntity::class);
     }
 
-    // Méthode pour récupérer un film par son identifiant
-    public function find(int $id): Film
+    // Récupérer un film par son ID
+    public function findById($id)
     {
-        // Requête SQL pour sélectionner un film par son identifiant
         $query = 'SELECT * FROM film WHERE id = :id';
-        // Prépare la requête pour éviter les injections SQL
         $stmt = $this->db->prepare($query);
-        // Exécute la requête avec l'identifiant fourni
         $stmt->execute(['id' => $id]);
 
-        // Récupère le film sous forme de tableau associatif
         $film = $stmt->fetch();
 
-        // Utilise le service de mappage pour convertir le résultat en objet Film
-        return $this->entityMapperService->mapToEntity($film, Film::class);
+        return $this->entityMapperService->mapToEntity($film, FilmEntity::class);
+    }
+
+    // Ajouter un nouveau film
+    public function create($data)
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO film (title, year, genre, synopsis, director, created_at) 
+            VALUES (:title, :year, :genre, :synopsis, :director, NOW())
+        ");
+        return $stmt->execute([
+            ':title' => $data['title'],
+            ':year' => $data['year'],
+            ':genre' => $data['genre'],
+            ':synopsis' => $data['synopsis'],
+            ':director' => $data['director']
+        ]);
+    }
+
+    // Mettre à jour un film existant
+    public function update($id, $data)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE film 
+            SET title = :title, year = :year, genre = :genre, synopsis = :synopsis, director = :director
+            WHERE id = :id
+        ");
+        return $stmt->execute([
+            ':id' => $id,
+            ':title' => $data['title'],
+            ':year' => $data['year'],
+            ':genre' => $data['genre'],
+            ':synopsis' => $data['synopsis'],
+            ':director' => $data['director']
+        ]);
+    }
+
+    // Supprimer un film par son ID
+    public function delete($id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM film WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
     }
 }
