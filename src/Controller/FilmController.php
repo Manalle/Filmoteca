@@ -50,7 +50,7 @@ class FilmController
     public function create(array $formData = null)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Si le formulaire a été soumis, traiter les données
+           
 
             $title = $_POST['title'] ?? '';
             $year = $_POST['year'] ?? '';
@@ -58,7 +58,6 @@ class FilmController
             $director = $_POST['director'] ?? '';
             $synopsis = $_POST['synopsis'] ?? '';
 
-            // Créer un objet Film avec les données du formulaire
             $film = new Film();
             $film->setTitle($title);
             $film->setYear($year);
@@ -66,21 +65,21 @@ class FilmController
             $film->setDirector($director);
             $film->setSynopsis($synopsis);
 
-            // Definition  des champs 'createdAt' et 'updatedAt' à la date actuelle
+            
             $now = new \DateTime();
             $film->setCreatedAt($now);
             $film->setUpdatedAt($now);
 
-            // Sauvegarde du film dans la base de données
+            
             $filmRepository = new FilmRepository();
             $filmRepository->save($film);
 
-            // Redirection  vers la liste des films après l'ajout
+            
             header('Location: /film/list');
             exit();
         }
 
-        // Si ce n'est pas une requête POST, afficher le formulaire
+        
         echo $this->renderer->render('film/create.html.twig');
     }
     
