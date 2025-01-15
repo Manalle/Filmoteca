@@ -102,8 +102,22 @@ class FilmController
         echo "Mise à jour d'un film";
     }
 
-    public function delete()
-    {
-        echo "Suppression d'un film";
+    public function delete(array $queryParams)
+{
+    // on verifie si l'id est present sinon ca renvoie une exception
+    if (!isset($queryParams['id'])) {
+        throw new \InvalidArgumentException('Un ID doit être fourni pour supprimer un film.    ');
     }
+
+    $filmId = (int) $queryParams['id'];
+
+
+    $filmRepository = new FilmRepository();
+    $filmRepository->deleteById($filmId);
+
+    
+    header('Location: /film/list');
+    exit();
+}
+
 }

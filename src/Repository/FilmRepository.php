@@ -71,6 +71,14 @@ class FilmRepository
     }
    
 
+    public function deleteById(int $id): void
+{
+    $query = 'DELETE FROM film WHERE id = :id';
+    $stmt = $this->db->prepare($query);
+    $stmt->execute(['id' => $id]);
+}
+
+
 
 
 
