@@ -1,22 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
-use Twig\Environment;
 
-class HomeController 
+use App\Core\TemplateRenderer;
+
+class HomeController
 {
-    private $twig; // Déclarer la propriété twig
+    private TemplateRenderer $renderer;
 
-    // Ajouter un constructeur pour l'injection de dépendances
-    public function __construct($twig)
+    public function __construct()
     {
-        $this->twig = $twig; // Initialiser la propriété avec l'instance de Twig
+        // Initialise le moteur de template Twig
+        $this->renderer = new TemplateRenderer();
     }
 
-    // Méthode index pour rendre la vue home.html.twig
+    // Méthode pour afficher la page d'accueil
     public function index()
     {
-        // Utiliser $this->twig pour rendre la vue
-        echo $this->twig->render('home.html.twig');
+        // Rendre la vue homepage.html.twig
+        echo $this->renderer->render('homepage.html.twig');
     }
 }

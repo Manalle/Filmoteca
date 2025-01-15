@@ -1,75 +1,107 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
+use App\Core\TemplateRenderer;
+use App\Entity\Film;
 use App\Repository\FilmRepository;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 class FilmController
 {
-    protected Environment $twig;
+    private TemplateRenderer $renderer;
 
-    // Constructeur pour initialiser Twig
     public function __construct()
     {
-        // Créez un chargeur de fichiers pour Twig
-        $loader = new FilesystemLoader(__DIR__ . '/../views');
-        // Initialisation de l'environnement Twig
-        $this->twig = new Environment($loader);
+        $this->renderer = new TemplateRenderer();
     }
 
-    // Afficher la liste des films
-    public function index()
+    public function list(array $queryParams)
     {
-        // Créer une instance du repository pour récupérer les films
         $filmRepository = new FilmRepository();
-        // Récupérer tous les films
         $films = $filmRepository->findAll();
-        
-        // Rendu avec Twig
-        echo $this->twig->render('films.html.twig', ['films' => $films]);
+
+        /* $filmEntities = [];
+        foreach ($films as $film) {
+            $filmEntity = new Film();
+            $filmEntity->setId($film['id']);
+            $filmEntity->setTitle($film['title']);
+            $filmEntity->setYear($film['year']);
+            $filmEntity->setType($film['type']);
+            $filmEntity->setSynopsis($film['synopsis']);
+            $filmEntity->setDirector($film['director']);
+            $filmEntity->setCreatedAt(new \DateTime($film['created_at']));
+            $filmEntity->setUpdatedAt(new \DateTime($film['updated_at']));
+
+            $filmEntities[] = $filmEntity;
+        } */
+
+        //dd($films);
+
+        echo $this->renderer->render('film/list.html.twig', [
+            'films' => $films,
+        ]);
+
+        // header('Content-Type: application/json');
+        // echo json_encode($films);
     }
 
-    // Afficher la liste des films (version alternative)
-    public function list()
+    public function create(array $formData = null)
     {
-        // Créer une instance du repository pour récupérer les films
-        $filmRepository = new FilmRepository();
-        // Récupérer tous les films
-        $films = $filmRepository->findAll();
-        
-        // Rendu avec Twig
-        echo $this->twig->render('films_liste.html.twig', ['films' => $films]);
-    }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Si le formulaire a été soumis, traiter les données
 
-    // Créer un film (afficher un formulaire ou logique de création)
-    public function create()
-    {
-        echo "Création d'un film";
-    }
+            $title = $_POST['title'] ?? '';
+            $year = $_POST['year'] ?? '';
+            $type = $_POST['type'] ?? '';
+            $director = $_POST['director'] ?? '';
+            $synopsis = $_POST['synopsis'] ?? '';
 
-    // Afficher un film spécifique
+            // Créer un objet Film avec les données du formulaire
+            $film = new Film();
+            $film->setTitle($title);
+            $film->setYear($year);
+            $film->setType($type);
+            $film->setDirector($director);
+            $film->setSynopsis($synopsis);
+
+            // Definition  des champs 'createdAt' et 'updatedAt' à la date actuelle
+            $now = new \DateTime();
+            $film->setCreatedAt($now);
+            $film->setUpdatedAt($now);
+
+            // Sauvegarde du film dans la base de données
+            $filmRepository = new FilmRepository();
+            $filmRepository->save($film);
+
+            // Redirection  vers la liste des films après l'ajout
+            header('Location: /film/list');
+            exit();
+        }
+
+        // Si ce n'est pas une requête POST, afficher le formulaire
+        echo $this->renderer->render('film/create.html.twig');
+    }
+    
+
+    
+
+
+
     public function read(array $queryParams)
     {
-        // Récupérer l'ID du film dans les paramètres de la requête
-        $id = (int) $queryParams['id'];
-        
-        // Créer une instance du repository et récupérer le film par son ID
         $filmRepository = new FilmRepository();
-        $film = $filmRepository->findById($id);
-        
-        // Rendu avec Twig
-        echo $this->twig->render('film_details.html.twig', ['film' => $film]);
+        $film = $filmRepository->find((int) $queryParams['id']);
+
+        dd($film);
     }
 
-    // Mettre à jour un film (logique de mise à jour)
     public function update()
     {
         echo "Mise à jour d'un film";
     }
 
-    // Supprimer un film (logique de suppression)
     public function delete()
     {
         echo "Suppression d'un film";
