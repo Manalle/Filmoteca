@@ -135,9 +135,21 @@ class __TwigTemplate_9e90099877ac7a065d5692f75ee15441 extends Template
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, $context["film"], "updatedAt", [], "any", false, false, false, 38), "format", ["d/m/Y H:i"], "method", false, false, false, 38), "html", null, true);
                 yield "</td>
                         <td>
-                            <a href=\"/film/delete?id=";
+                            <a href=\"/film/read?id=";
                 // line 40
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["film"], "id", [], "any", false, false, false, 40), "html", null, true);
+                yield "\" class=\"btn btn-info btn-sm\">
+                                Voir
+                            </a>
+                            <a href=\"/film/update?id=";
+                // line 43
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["film"], "id", [], "any", false, false, false, 43), "html", null, true);
+                yield "\" class=\"btn btn-primary btn-sm\">
+                                Modifier
+                            </a>
+                            <a href=\"/film/delete?id=";
+                // line 46
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["film"], "id", [], "any", false, false, false, 46), "html", null, true);
                 yield "\" class=\"btn btn-danger btn-sm\">
                                 Supprimer
                             </a>
@@ -148,7 +160,7 @@ class __TwigTemplate_9e90099877ac7a065d5692f75ee15441 extends Template
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_key'], $context['film'], $context['_parent']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 46
+            // line 52
             yield "            </tbody>
         </table>
     ";
@@ -177,7 +189,7 @@ class __TwigTemplate_9e90099877ac7a065d5692f75ee15441 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  152 => 46,  140 => 40,  135 => 38,  131 => 37,  127 => 36,  123 => 35,  119 => 34,  115 => 33,  111 => 32,  107 => 31,  104 => 30,  100 => 29,  82 => 13,  78 => 11,  76 => 10,  70 => 6,  63 => 5,  52 => 3,  41 => 1,);
+        return array (  164 => 52,  152 => 46,  146 => 43,  140 => 40,  135 => 38,  131 => 37,  127 => 36,  123 => 35,  119 => 34,  115 => 33,  111 => 32,  107 => 31,  104 => 30,  100 => 29,  82 => 13,  78 => 11,  76 => 10,  70 => 6,  63 => 5,  52 => 3,  41 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -221,6 +233,12 @@ class __TwigTemplate_9e90099877ac7a065d5692f75ee15441 extends Template
                         <td>{{ film.createdAt.format('d/m/Y H:i') }}</td>
                         <td>{{ film.updatedAt.format('d/m/Y H:i') }}</td>
                         <td>
+                            <a href=\"/film/read?id={{ film.id }}\" class=\"btn btn-info btn-sm\">
+                                Voir
+                            </a>
+                            <a href=\"/film/update?id={{ film.id }}\" class=\"btn btn-primary btn-sm\">
+                                Modifier
+                            </a>
                             <a href=\"/film/delete?id={{ film.id }}\" class=\"btn btn-danger btn-sm\">
                                 Supprimer
                             </a>

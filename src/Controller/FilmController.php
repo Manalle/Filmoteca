@@ -84,22 +84,75 @@ class FilmController
     }
     
 
-    
-
 
 
     public function read(array $queryParams)
-    {
-        $filmRepository = new FilmRepository();
-        $film = $filmRepository->find((int) $queryParams['id']);
-
-        dd($film);
+{
+    
+    if (!isset($queryParams['id'])) {
+        throw new \InvalidArgumentException('Un ID doit être spécifié pour afficher un film.');
     }
 
-    public function update()
-    {
-        echo "Mise à jour d'un film";
+    $filmId = (int)$queryParams['id'];
+
+    
+    $filmRepository = new FilmRepository();
+    $film = $filmRepository->find($filmId);
+
+    if (!$film) {
+        throw new \RuntimeException("Aucun film trouvée avec l'ID $filmId.");
     }
+
+    
+    echo $this->renderer->render('film/read.html.twig', [
+        'film' => $film,
+    ]);
+}
+
+
+    public function update(array $queryParams)
+{
+    $filmRepository = new FilmRepository();
+
+    
+    if (!isset($queryParams['id'])) {
+        throw new \InvalidArgumentException('Un ID doit être spécifié pour mettre à jour un film.');
+    }
+
+    $filmId = (int) $queryParams['id'];
+
+    
+    $film = $filmRepository->find($filmId);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+        $title = $_POST['title'] ?? $film->getTitle();
+        $year = $_POST['year'] ?? $film->getYear();
+        $type = $_POST['type'] ?? $film->getType();
+        $director = $_POST['director'] ?? $film->getDirector();
+        $synopsis = $_POST['synopsis'] ?? $film->getSynopsis();
+
+        
+        $film->setTitle($title);
+        $film->setYear($year);
+        $film->setType($type);
+        $film->setDirector($director);
+        $film->setSynopsis($synopsis);
+        $film->setUpdatedAt(new \DateTime());
+
+        
+        $filmRepository->save($film);
+
+        
+        header('Location: /film/list');
+        exit();
+    }
+
+    
+    echo $this->renderer->render('film/update.html.twig', [
+        'film' => $film,
+    ]);
+}
 
     public function delete(array $queryParams)
 {

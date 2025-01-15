@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du film : {{ film.title }}{% endblock %}
+
+{% block content %}
+    <h2>Détails du film</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">Titre</dt>
+        <dd class="col-sm-9">{{ film.title }}</dd>
+
+        <dt class="col-sm-3">Année</dt>
+        <dd class="col-sm-9">{{ film.year }}</dd>
+
+        <dt class="col-sm-3">Genre</dt>
+        <dd class="col-sm-9">{{ film.type }}</dd>
+
+        <dt class="col-sm-3">Réalisateur</dt>
+        <dd class="col-sm-9">{{ film.director }}</dd>
+
+        <dt class="col-sm-3">Synopsis</dt>
+        <dd class="col-sm-9">{{ film.synopsis }}</dd>
+
+        <dt class="col-sm-3">Ajouté le</dt>
+        <dd class="col-sm-9">{{ film.createdAt.format('d/m/Y H:i') }}</dd>
+
+        <dt class="col-sm-3">Modifié le</dt>
+        <dd class="col-sm-9">{{ film.updatedAt.format('d/m/Y H:i') }}</dd>
+    </dl>
+
+    <a href="/film/list" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}
